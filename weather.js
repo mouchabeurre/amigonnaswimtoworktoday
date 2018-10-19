@@ -1,7 +1,7 @@
 const label = {
   rainy: 'rainy',
   sunny: 'sunny',
-  snow: 'flurries',
+  snow: 'snow',
   cloud: 'cloudy',
   thunder: 'thunder-storm',
   sunrain: 'sun-shower',
@@ -20,6 +20,7 @@ class Weather {
     this.setLocalStorage = this.setLocalStorage.bind(this);
     this.getLocalStorage = this.getLocalStorage.bind(this);
     this.setState = this.setState.bind(this);
+    this.populateUI = this.populateUI.bind(this);
     this.init();
   }
 
@@ -36,7 +37,7 @@ class Weather {
     }
   }
 
-  setState(data, coords) {
+  setState(data, coords, weather) {
     const day_data = this.getDayDataArray(data);
     const coords_short = {
       latitude: coords.latitude,
@@ -46,6 +47,7 @@ class Weather {
       date: this.getKeyFromDate(),
       data: day_data,
       coords: coords_short,
+      weather: weather
     };
     this.setLocalStorage(this.state);
   }
@@ -57,32 +59,22 @@ class Weather {
   async geoSuccess(pos) {
     const coords = pos.coords;
     const local_state = this.getLocalStorage();
-    let data;
-    let new_data;
-    if (local_state) {
-      const local_lat = local_state.coords.latitude;
-      const local_long = local_state.coords.longitude;
-      if (
-        Math.abs(coords.latitude - local_lat) +
-          Math.abs(coords.longitude - local_long) >
-        0.3
-      ) {
-        data = await this.getForecast(coords);
-        new_data = JSON.parse(data);
-      } else {
-        if (this.getKeyFromDate() != local_state.date) {
-          data = await this.getForecast(coords);
-          new_data = JSON.parse(data);
-        } else {
-          new_data = local_state;
-        }
-      }
-    } else {
-      data = await this.getForecast(coords);
-      new_data = JSON.parse(data);
-    }
-    this.setState(new_data, coords);
+    const data = await this.getForecast(coords);
+    const weather = await this.getWeather(coords);
+    this.setState(JSON.parse(data), coords, JSON.parse(weather));
     this.setStateFromResult(this.state.data);
+    this.populateUI();
+  }
+
+  populateUI() {
+    let className;
+    if (this.snow) {
+      className = label.snow;
+    } else {
+      if (this.rain > 1) {
+        className = label.rainy;
+      }
+    }
   }
 
   getForecast(coords) {
@@ -91,6 +83,27 @@ class Weather {
     },${
       coords.longitude
     }&_auth=ARsFElUrASNWewM0DngAKVU9V2JcKgEmC3dVNgxpUC0FblY3VTVWMFM9USwAL1VjWHUGZQw3BjYKYVUtC3lTMgFrBWlVPgFmVjkDZg4hACtVe1c2XHwBJgtpVTsMYlAtBWdWOlU2VipTPVE1ADRVf1huBm4MLAYhCmhVNwtlUzkBZAVoVTcBZVY%2FA2cOIQArVWNXZVwwATwLPFU2DGhQMQU3VjNVYlY1UzlRMgAuVWRYbQZiDDQGOApgVToLblMvAX0FGFVFAX5WeQMjDmsAclV7V2JcPQFt&_c=05d09a4d9f965ff1537a0d7c0a3f7f60`;
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText,
+          });
+        }
+      };
+      xhr.send();
+    });
+  }
+
+  getWeather(coords) {
+    const url = `https://fcc-weather-api.glitch.me/api/current?lat=${
+      coords.latitude
+    }&lon=${coords.longitude}`;
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.open('GET', url);
