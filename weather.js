@@ -47,7 +47,7 @@ class Weather {
       date: this.getKeyFromDate(),
       data: day_data,
       coords: coords_short,
-      weather: weather
+      weather: weather,
     };
     this.setLocalStorage(this.state);
   }
@@ -68,13 +68,21 @@ class Weather {
 
   populateUI() {
     let className;
+    let oTemp = document.getElementsByClassName('temp')[0];
+    oTemp.textContent = this.temperature;
+    let oCity = document.getElementsByClassName('city')[0];
+    oCity.textContent = this.state.weather.name;
     if (this.snow) {
       className = label.snow;
     } else {
       if (this.rain > 1) {
         className = label.rainy;
+      } else {
+        className = label.sunny;
       }
     }
+    let oBody = document.getElementsByTagName('body')[0];
+    oBody.className.add(className);
   }
 
   getForecast(coords) {
