@@ -5,6 +5,33 @@ body{
     height: 100%;
     overflow: hidden;
     margin: 0;
+    background-image: url('images/snow-paysage.svg');
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: repeat;
+    background-origin: content-box;
+}
+h1{
+    margin:0;
+}
+body.sunny{
+    background-image: url('images/sunny-paysage.svg');
+}
+body.rainy{
+    background-image: url('images/rain-paysage.svg');
+}
+body.snow{
+    background-image: url('images/snow-paysage.svg');
+}
+body.cloudy{
+    background-image: url('images/cloudy-paysage.svg');
+}
+body.thunder-storm{
+    background-image: url('images/stormy-paysage.svg');
+}
+body.sun-shower{
+    background-image: url('images/sunrain-paysage.svg');
 }
 section{
     height: 100%;
@@ -14,6 +41,7 @@ section{
     align-items: center;
 }
 .wrapper-content{
+    color: #fff;
     text-align: center;
     padding: 50px;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.61);
@@ -22,4 +50,28 @@ section{
 }
 .wrapper-content > div{
     padding: 10px;
+}
+
+@media screen and (max-width: 834px){
+    body{
+        background-image: url('images/snow-portrait.svg');
+    }
+    body.sunny{
+        background-image: url('images/sunny-portrait.svg');
+    }
+    body.rainy{
+        background-image: url('images/rain-portrait.svg');
+    }
+    body.snow{
+        background-image: url('images/snow-portrait.svg');
+    }
+    body.cloudy{
+        background-image: url('images/cloudy-portrait.svg');
+    }
+    body.thunder-storm{
+        background-image: url('images/stormy-portrait.svg');
+    }
+    body.sun-shower{
+        background-image: url('images/sunrain-portrait.svg');
+    }
 }
