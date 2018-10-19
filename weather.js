@@ -69,7 +69,7 @@ class Weather {
   populateUI() {
     let className;
     let oTemp = document.getElementsByClassName('temp')[0];
-    oTemp.textContent = this.temperature;
+    oTemp.textContent = `${this.temperature}`.slice(0, 4) + " degrés";
     let oCity = document.getElementsByClassName('city')[0];
     oCity.textContent = this.state.weather.name;
     if (this.snow) {
@@ -82,7 +82,7 @@ class Weather {
       }
     }
     let oBody = document.getElementsByTagName('body')[0];
-    oBody.className.add(className);
+    oBody.classList.add(className);
   }
 
   getForecast(coords) {
