@@ -65,21 +65,30 @@ class Weather {
     this.setStateFromResult(this.state.data);
     this.populateUI();
   }
-
   populateUI() {
     let className;
     let oTemp = document.getElementsByClassName('temp')[0];
-    oTemp.textContent = `${this.temperature}`.slice(0, 4) + " degrés";
+    oTemp.textContent = this.state.weather.main.temp + " degrés";
     let oCity = document.getElementsByClassName('city')[0];
     oCity.textContent = this.state.weather.name;
-    if (this.snow) {
-      className = label.snow;
-    } else {
-      if (this.rain > 1) {
+    let oResp = document.getElementsByClassName('response')[0];
+    oResp.textContent = this.rain > 0 ? "OUI" : "NON";
+    let oWea = document.getElementsByClassName('weather')[0];
+    if(this.state.weather.weather[0].id === 800){
+        oWea.textContent = "Ensoleillé";
+    }else if([500].includes(this.state.weather.weather[0].id)||this.rain){
+        oWea.textContent = "Pluie";
         className = label.rainy;
-      } else {
-        className = label.sunny;
-      }
+        className = label.rainy;
+    }else if([801, 802, 803, 804].includes(this.state.weather.weather[0].id)){
+        oWea.textContent = "Nuageux";
+        className = label.cloud;
+    }else if([701, 721].includes(this.state.weather.weather[0].id)){
+        oWea.textContent = "Brouillard";
+        className = label.cloud;
+    }
+    if(this.snow) {
+      className = label.snow;
     }
     let oBody = document.getElementsByTagName('body')[0];
     oBody.classList.add(className);

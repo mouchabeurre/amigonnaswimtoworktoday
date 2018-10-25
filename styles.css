@@ -5,7 +5,7 @@ body{
     height: 100%;
     overflow: hidden;
     margin: 0;
-    background-image: url('images/snow-paysage.svg');
+    background-image: url('images/sunny-paysage.svg');
     background-size: cover;
     background-attachment: scroll;
     background-position: center;
@@ -54,7 +54,7 @@ section{
 
 @media screen and (max-width: 834px){
     body{
-        background-image: url('images/snow-portrait.svg');
+        background-image: url('images/sunny-portrait.svg');
     }
     body.sunny{
         background-image: url('images/sunny-portrait.svg');
